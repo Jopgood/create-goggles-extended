@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.createge.mixin.client",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "BasinBlockEntityMixin",
+    "MechanicalMixerBlockEntityMixin",
+    "BasinOperatingBlockEntityAccessor",
+    "MechanicalPressBlockEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
