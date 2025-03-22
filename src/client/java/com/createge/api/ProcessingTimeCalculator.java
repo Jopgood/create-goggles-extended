@@ -44,12 +44,39 @@ public final class ProcessingTimeCalculator {
 
     /**
      * Calculates the mixer processing frequency (recipes processed per tick).
+     * This matches how Create's mixer actually processes recipes.
      */
     public static double calculateMixerFrequency(double rpm, double recipeSpeed) {
-        if (rpm <= 0 || recipeSpeed <= 0) return 0;
+        if (rpm <= 0) return 0;
+        if (recipeSpeed <= 0) recipeSpeed = 1;
         
-        // Simplified model based on Create's processing behavior
-        double speedFactor = Math.min(rpm / 32.0, 2.0); // Cap at 2x for high RPM
-        return speedFactor / (recipeSpeed * 20); // 20 ticks baseline
+        // Based on Create's actual processing formula
+        double baseTicksPerRecipe;
+        if (rpm < RPM_SLOW_THRESHOLD) {
+            baseTicksPerRecipe = 50; // Slower
+        } else if (rpm < RPM_NORMAL_THRESHOLD) {
+            baseTicksPerRecipe = 30; // Normal
+        } else if (rpm < RPM_FAST_THRESHOLD) {
+            baseTicksPerRecipe = 20; // Fast
+        } else if (rpm < RPM_SUPER_THRESHOLD) {
+            baseTicksPerRecipe = 15; // Very fast
+        } else {
+            baseTicksPerRecipe = 10; // Super fast
+        }
+        
+        // Adjust for recipe-specific speed
+        double actualTicksPerRecipe = baseTicksPerRecipe * recipeSpeed;
+        
+        // Convert to recipes per tick
+        double recipesPerTick = 1.0 / actualTicksPerRecipe;
+        
+        System.out.println("[CreateGE] Mixer calculation:");
+        System.out.println("[CreateGE] RPM: " + rpm);
+        System.out.println("[CreateGE] Recipe Speed: " + recipeSpeed);
+        System.out.println("[CreateGE] Base Ticks: " + baseTicksPerRecipe);
+        System.out.println("[CreateGE] Actual Ticks: " + actualTicksPerRecipe);
+        System.out.println("[CreateGE] Recipes/Tick: " + recipesPerTick);
+        
+        return recipesPerTick;
     }
 }
