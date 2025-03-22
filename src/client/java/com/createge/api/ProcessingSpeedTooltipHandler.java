@@ -1,5 +1,6 @@
 package com.createge.api;
 
+import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.text.Text;
@@ -33,9 +34,14 @@ public final class ProcessingSpeedTooltipHandler {
         if (processor instanceof MechanicalPressBlockEntity) {
             double processingTicks = ProcessingTimeCalculator.calculateMechanicalPressTime(rpm);
             recipesPerMinute = ProcessingTimeCalculator.ticksToRecipesPerMinute(processingTicks);
-        } else {
+            System.out.println("[CreateGE] Press calculation: " + processingTicks + " ticks, " + recipesPerMinute + " per minute");
+        } else if (processor instanceof MechanicalMixerBlockEntity) {
             double recipesPerTick = ProcessingTimeCalculator.calculateMixerFrequency(rpm, recipeSpeed);
-            recipesPerMinute = outputCount * (recipesPerTick * (TICKS_PER_SECOND * SECONDS_PER_MINUTE));
+            recipesPerMinute = Math.max(1, outputCount) * (recipesPerTick * (TICKS_PER_SECOND * SECONDS_PER_MINUTE));
+            System.out.println("[CreateGE] Mixer calculation: " + recipesPerTick + " per tick, " + recipesPerMinute + " per minute");
+        } else {
+            System.out.println("[CreateGE] Unknown processor type");
+            recipesPerMinute = 0;
         }
 
         tooltip.add(Text.empty());
@@ -55,12 +61,15 @@ public final class ProcessingSpeedTooltipHandler {
             return processingDuration != 0 ? 100f / processingDuration : 1f;
         } catch (Exception e) {
             // Log error or handle appropriately
+            System.out.println("[CreateGE] Error calculating recipe multiplier: " + e.getMessage());
             return 1f;
         }
     }
 
     public static BlockEntity findProcessingBlockEntity(BlockEntity source, int yOffset) {
-        if (source.getWorld() == null) return null;
-        return source.getWorld().getBlockEntity(source.getPos().up(yOffset));
+        if (source == null || source.getWorld() == null) return null;
+        BlockEntity entity = source.getWorld().getBlockEntity(source.getPos().up(yOffset));
+        System.out.println("[CreateGE] Finding processing entity: " + (entity != null ? entity.getClass().getSimpleName() : "null"));
+        return entity;
     }
 }
