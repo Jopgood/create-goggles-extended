@@ -10,9 +10,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
-import net.minecraft.server.world.ServerWorld;  // Corrected import for ServerWorld
-import net.minecraft.network.chat.Text;
-import net.minecraft.world.level.level.Level;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.registry.DynamicRegistryManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +26,7 @@ public abstract class BasinBlockEntityMixin implements IHaveGoggleInformation {
 
 	@Inject(method = "addToGoggleTooltip", at = @At("RETURN"), cancellable = true, remap = false)
 	private void addProcessingSpeedTooltip(List<Text> tooltip, boolean isPlayerSneaking,
-										   CallbackInfoReturnable<Boolean> cir) {
+							   CallbackInfoReturnable<Boolean> cir) {
 		BasinBlockEntity basin = (BasinBlockEntity) (Object) this;
 
 		// Get the filter item
@@ -38,11 +37,11 @@ public abstract class BasinBlockEntityMixin implements IHaveGoggleInformation {
 		}
 
 		// Check if the world is a ServerWorld before accessing server-side data
-		ServerWorld world = basin.getLevel();  // Yarn uses getLevel() instead of getWorld()
+		ServerWorld world = (ServerWorld) basin.getWorld();
 		if (world instanceof ServerWorld serverWorld) {  // Proper casting to ServerWorld
 			// Access RecipeManager and DynamicRegistryManager on the server side
 			RecipeManager recipeManager = serverWorld.getRecipeManager();
-			DynamicRegistryManager registryManager = serverWorld.getRegistryManager();  // Get DynamicRegistryManager
+			DynamicRegistryManager registryManager = serverWorld.getRegistryManager();
 
 			// Find a matching MixingRecipe
 			Optional<? extends Recipe<?>> optionalRecipe = recipeManager.getFirstMatch(AllRecipeTypes.MIXING.getType(), basin.inputInventory, serverWorld);
