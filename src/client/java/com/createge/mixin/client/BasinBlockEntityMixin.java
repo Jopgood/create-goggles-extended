@@ -5,7 +5,7 @@ import com.createge.api.ProcessingSpeedTooltipHandler;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
+import com.simibubi.create.content.processing.recipe.MixingRecipe;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
@@ -68,6 +68,11 @@ public abstract class BasinBlockEntityMixin implements IHaveGoggleInformation {
 			float recipeSpeed = handler.getRecipeSpeed();
 			int outputCount = handler.getProcessingOutputCount();
 
+			System.out.println("[CreateGE] Processing speed details:");
+			System.out.println("[CreateGE] RPM: " + rpm);
+			System.out.println("[CreateGE] Recipe Speed: " + recipeSpeed);
+			System.out.println("[CreateGE] Output Count: " + outputCount);
+
 			ProcessingSpeedTooltipHandler.addProcessingSpeedTooltip(
 					tooltip,
 					rpm,
@@ -75,6 +80,8 @@ public abstract class BasinBlockEntityMixin implements IHaveGoggleInformation {
 					outputCount,
 					processor,
 					filterStack.getName().getString());
+		} else {
+			System.out.println("[CreateGE] No processor found or it's not a processing recipe handler");
 		}
 
 		cir.setReturnValue(true);
