@@ -5,7 +5,7 @@ import com.createge.api.ProcessingSpeedTooltipHandler;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.processing.recipe.MixingRecipe;
+import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
