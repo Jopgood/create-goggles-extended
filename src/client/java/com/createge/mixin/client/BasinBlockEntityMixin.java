@@ -13,6 +13,7 @@ import net.minecraft.recipe.RecipeManager;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,9 +37,9 @@ public abstract class BasinBlockEntityMixin implements IHaveGoggleInformation {
 			return;  // No filter = no tooltip modification
 		}
 
-		// Check if the world is a ServerWorld before accessing server-side data
-		ServerWorld world = (ServerWorld) basin.getWorld();
-		if (world instanceof ServerWorld serverWorld) {  // Proper casting to ServerWorld
+		// Get the world and check if it's a server world
+		World world = basin.getWorld();
+		if (world instanceof ServerWorld serverWorld) {
 			// Access RecipeManager and DynamicRegistryManager on the server side
 			RecipeManager recipeManager = serverWorld.getRecipeManager();
 			DynamicRegistryManager registryManager = serverWorld.getRegistryManager();
