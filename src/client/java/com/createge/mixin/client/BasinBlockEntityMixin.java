@@ -68,6 +68,11 @@ public abstract class BasinBlockEntityMixin implements IHaveGoggleInformation {
 			float recipeSpeed = handler.getRecipeSpeed();
 			int outputCount = handler.getProcessingOutputCount();
 
+			System.out.println("[CreateGE] Processing speed details:");
+			System.out.println("[CreateGE] RPM: " + rpm);
+			System.out.println("[CreateGE] Recipe Speed: " + recipeSpeed);
+			System.out.println("[CreateGE] Output Count: " + outputCount);
+
 			ProcessingSpeedTooltipHandler.addProcessingSpeedTooltip(
 					tooltip,
 					rpm,
@@ -75,6 +80,8 @@ public abstract class BasinBlockEntityMixin implements IHaveGoggleInformation {
 					outputCount,
 					processor,
 					filterStack.getName().getString());
+		} else {
+			System.out.println("[CreateGE] No processor found or it's not a processing recipe handler");
 		}
 
 		cir.setReturnValue(true);

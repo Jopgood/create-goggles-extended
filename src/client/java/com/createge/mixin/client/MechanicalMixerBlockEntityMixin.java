@@ -24,12 +24,15 @@ public class MechanicalMixerBlockEntityMixin implements IProcessingRecipeHandler
 
     @Override
     public ProcessingRecipe<?> getCurrentRecipe() {
+        System.out.println("[CreateGE] Current recipe: " + (this.currentRecipe != null ? "Found" : "Not found"));
         return this.currentRecipe;
     }
 
     @Override
     public float getSpeedMultiplier() {
-        return Math.abs(((MechanicalMixerBlockEntity)(Object)this).getSpeed());
+        float speed = Math.abs(((MechanicalMixerBlockEntity)(Object)this).getSpeed());
+        System.out.println("[CreateGE] Mixer speed: " + speed);
+        return speed;
     }
 
     @Override
@@ -43,6 +46,7 @@ public class MechanicalMixerBlockEntityMixin implements IProcessingRecipeHandler
         if (!recipes.isEmpty() && recipes.get(0) instanceof ProcessingRecipe<?> recipe
                 && recipe.getType() == getRecipeType()) {
             this.currentRecipe = recipe;
+            System.out.println("[CreateGE] Stored recipe from getMatchingRecipes");
         }
     }
 
@@ -51,9 +55,11 @@ public class MechanicalMixerBlockEntityMixin implements IProcessingRecipeHandler
         ProcessingRecipe<?> recipe = getCurrentRecipe();
         if (recipe != null) {
             int duration = recipe.getProcessingDuration();
-            return duration != 0 ? duration / 100f : 1f;
+            float result = duration != 0 ? duration / 100f : 1f;
+            System.out.println("[CreateGE] Recipe duration: " + duration + ", Speed: " + result);
+            return result;
         }
+        System.out.println("[CreateGE] No recipe found for speed calculation");
         return 1f;
     }
-
 }
