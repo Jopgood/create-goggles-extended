@@ -8,10 +8,8 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.util.math.Direction;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,25 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(MechanicalMixerBlockEntity.class)
-public abstract class MechanicalMixerBlockEntityMixin implements IProcessingRecipeHandler {
+public class MechanicalMixerBlockEntityMixin implements IProcessingRecipeHandler {
     @Unique
     private ProcessingRecipe<?> currentRecipe;
 
     @Override
     public ProcessingRecipe<?> getCurrentRecipe() {
-        // Try to get directly from the basin's operating recipe if our stored one is null
-        if (this.currentRecipe == null) {
-            MechanicalMixerBlockEntity mixer = (MechanicalMixerBlockEntity)(Object)this;
-            if (mixer.getBasin() != null) {
-                Recipe<?> basinRecipe = mixer.getBasin().getRecipe();
-                if (basinRecipe instanceof ProcessingRecipe) {
-                    this.currentRecipe = (ProcessingRecipe<?>) basinRecipe;
-                    System.out.println("[CreateGE] Retrieved recipe from basin: " + 
-                        (this.currentRecipe != null ? "Found" : "Not found"));
-                }
-            }
-        }
-        
         System.out.println("[CreateGE] Current recipe: " + (this.currentRecipe != null ? "Found" : "Not found"));
         return this.currentRecipe;
     }
