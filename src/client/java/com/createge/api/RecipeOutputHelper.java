@@ -2,10 +2,12 @@ package com.createge.api;
 
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.item.ItemHelper;
 
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
@@ -30,7 +32,7 @@ public final class RecipeOutputHelper {
      * @param basin The basin block entity
      * @return A list of fluid outputs
      */
-    public static List<FluidIngredient> getFluidOutputs(BasinBlockEntity basin) {
+    public static List<FluidStack> getFluidOutputs(BasinBlockEntity basin) {
         if (basin == null || basin.getWorld() == null || !(basin.getWorld() instanceof ServerWorld)) {
             return Collections.emptyList();
         }
@@ -57,7 +59,8 @@ public final class RecipeOutputHelper {
         DynamicRegistryManager registryManager = ((ServerWorld) basin.getWorld()).getRegistryManager();
         Map<Item, Integer> outputMap = new HashMap<>();
         
-        for (ItemStack stack : recipe.getRollableResults()) {
+        for (ProcessingOutput output : recipe.getRollableResults()) {
+            ItemStack stack = output.getStack();
             ItemStack actualOutput = stack.copy();
             Item item = actualOutput.getItem();
             int count = actualOutput.getCount();
